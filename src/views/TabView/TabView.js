@@ -195,8 +195,8 @@ class TabView extends PureComponent<void, Props, void> {
 
 const mapStateToProps = (state: Object) => {
   return {
-    navSwipeBlockedAndroid: state.getIn(['app', 'navSwipeBlockedAndroid']),
-    navSwipeBlockedIos: state.getIn(['app', 'navSwipeBlockedIos']),
+    navSwipeBlockedAndroid: state.tmp.app.getIn(['navSwipeBlockedAndroid']),
+    navSwipeBlockedIos: state.tmp.app.getIn(['navSwipeBlockedIos']),
   };
 };
 
