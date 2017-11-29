@@ -1,6 +1,7 @@
 /* @flow */
 
 import * as React from 'react';
+import { connect } from 'react-redux';
 import { View, StyleSheet, Platform } from 'react-native';
 import { TabViewAnimated, TabViewPagerPan } from 'react-native-tab-view';
 import type { Layout } from 'react-native-tab-view/src/TabViewTypeDefinitions';
@@ -171,11 +172,15 @@ class TabView extends React.PureComponent<Props> {
       tabBarPosition,
       animationEnabled,
       configureTransition,
-      swipeEnabled,
       lazy,
       initialLayout,
       screenProps,
     } = this.props;
+
+    let { swipeEnabled } = this.props;
+    if (this.props.navSwipeBlockedIos || this.props.navSwipeBlockedAndroid) {
+      swipeEnabled = false;
+    }
 
     let renderHeader;
     let renderFooter;
@@ -226,7 +231,14 @@ class TabView extends React.PureComponent<Props> {
   }
 }
 
-export default withCachedChildNavigation(TabView);
+const mapStateToProps = (state: Object) => {
+  return {
+    navSwipeBlockedAndroid: state.tmp.app.getIn(['navSwipeBlockedAndroid']),
+    navSwipeBlockedIos: state.tmp.app.getIn(['navSwipeBlockedIos']),
+  };
+};
+
+export default connect(mapStateToProps)(withCachedChildNavigation(TabView));
 
 const styles = StyleSheet.create({
   container: {
