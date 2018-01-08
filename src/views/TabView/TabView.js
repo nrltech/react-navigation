@@ -1,6 +1,7 @@
 /* @flow */
 
 import * as React from 'react';
+import { connect } from 'react-redux';
 import { View, StyleSheet, Platform } from 'react-native';
 import { TabViewAnimated, TabViewPagerPan } from 'react-native-tab-view';
 import type { Layout } from 'react-native-tab-view/src/TabViewTypeDefinitions';
@@ -38,6 +39,7 @@ export type TabScene = {
 };
 
 type Props = {
+  navSwipeBlocked: boolean,
   tabBarComponent?: React.ComponentType<*>,
   tabBarPosition?: 'top' | 'bottom',
   tabBarOptions?: {},
@@ -176,6 +178,11 @@ class TabView extends React.PureComponent<Props> {
       screenProps,
     } = this.props;
 
+    let { swipeEnabled } = this.props;
+    if (this.props.navSwipeBlocked) {
+      swipeEnabled = false;
+    }
+
     let renderHeader;
     let renderFooter;
     let renderPager;
@@ -188,11 +195,6 @@ class TabView extends React.PureComponent<Props> {
 
     const tabBarVisible =
       options.tabBarVisible == null ? true : options.tabBarVisible;
-
-    const swipeEnabled =
-      options.swipeEnabled == null
-        ? this.props.swipeEnabled
-        : options.swipeEnabled;
 
     if (tabBarComponent !== undefined && tabBarVisible) {
       if (tabBarPosition === 'bottom') {
@@ -230,7 +232,13 @@ class TabView extends React.PureComponent<Props> {
   }
 }
 
-export default withCachedChildNavigation(TabView);
+const mapStateToProps = (state: Object) => {
+  return {
+    navSwipeBlocked: state.tmp.app.navSwipeBlocked,
+  };
+};
+
+export default connect(mapStateToProps)(withCachedChildNavigation(TabView));
 
 const styles = StyleSheet.create({
   container: {
