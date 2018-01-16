@@ -33,8 +33,7 @@ export type TabScene = {
 };
 
 type Props = {
-  navSwipeBlockedAndroid: boolean,
-  navSwipeBlockedIos: boolean,
+  navSwipeBlocked: boolean,
   tabBarComponent?: ReactClass<*>,
   tabBarPosition?: 'top' | 'bottom',
   tabBarOptions?: {},
@@ -156,7 +155,7 @@ class TabView extends PureComponent<void, Props, void> {
     } = this.props;
 
     let { swipeEnabled } = this.props;
-    if (this.props.navSwipeBlockedIos || this.props.navSwipeBlockedAndroid) {
+    if (this.props.navSwipeBlocked) {
       swipeEnabled = false;
     }
 
@@ -205,8 +204,7 @@ class TabView extends PureComponent<void, Props, void> {
 
 const mapStateToProps = (state: Object) => {
   return {
-    navSwipeBlockedAndroid: state.tmp.app.navSwipeBlockedAndroid,
-    navSwipeBlockedIos: state.tmp.app.navSwipeBlockedIos,
+    navSwipeBlocked: state.tmp.app.navSwipeBlocked,
   };
 };
 
